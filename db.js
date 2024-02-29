@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const dbUrl =
-  "mongodb+srv://mtudorache:at9DlwAhTTTERm6H@brewshare.f8j8ymd.mongodb.net/?retryWrites=true&w=majority";
+  "mongodb+srv://mihaitudorachebusiness:ETE5WA2Uh2I1nqNw@cluster0.gedsktn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 const connectDB = () => {
   mongoose
