@@ -28,12 +28,51 @@ exports.createBeer = async (req, res) => {
   }
 };
 
-exports.getAllBeers = async (req, res) => {
+exports.getAllBeers = async (_, res) => {
   try {
     const beers = await Beer.find();
     res.json(beers);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.getBeerById = async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const beer = await Beer.findById({ _id });
+    res.json(beer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.editBeer = async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const { name, totalVolume, currentVolume, og, fg, ibu, ebc } = req.body;
+    const beer = await Beer.findById({ _id });
+
+    if (name) beer.name = name;
+    if (totalVolume) beer.totalVolume = totalVolume;
+    if (currentVolume) beer.currentVolume = currentVolume;
+    if (og || fg) {
+      if (og) beer.stats.og = og;
+      if (fg) beer.stats.fg = fg;
+      beer.stats.abv = calculateAbv(beer.stats.og, beer.stats.fg);
+    }
+    if (ibu) beer.stats.ibu = ibu;
+    if (ebc) {
+      beer.stats.ebc = ebc;
+      beer.stats.srm = calculateSrm(ebc);
+      beer.stats.hex = calculateHex(calculateSrm(ebc));
+    }
+
+    await beer.save();
+    res.json(beer);
+  } catch (error) {
     res.status(500).json({ error: "Server error" });
   }
 };
