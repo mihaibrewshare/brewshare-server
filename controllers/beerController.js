@@ -1,7 +1,5 @@
 const Beer = require("../models/Beer");
-const calculateAbv = require("../utils/abvCalculator");
-const calculateSrm = require("../utils/ebcToSrmCalculator");
-const calculateHex = require("../utils/srmToHexCalculator");
+const { calculateAbv, calculateSrm, calculateHex } = require("brewshare");
 
 exports.createBeer = async (req, res) => {
   try {
