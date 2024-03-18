@@ -1,5 +1,5 @@
 const Beer = require("../models/Beer");
-const { calculateAbv, calculateSrm, calculateHex } = require("brewshare");
+const { calculateAbv, ebcToSrm, srmToHex } = require("brewshare");
 
 exports.createBeer = async (req, res) => {
   try {
@@ -13,8 +13,8 @@ exports.createBeer = async (req, res) => {
         fg,
         ibu,
         ebc,
-        srm: calculateSrm(ebc),
-        hex: calculateHex(calculateSrm(ebc)),
+        srm: ebcToSrm(ebc),
+        hex: srmToHex(ebcToSrm(ebc)),
         abv: calculateAbv(og, fg),
       },
     });
@@ -64,8 +64,8 @@ exports.editBeer = async (req, res) => {
     if (ibu) beer.stats.ibu = ibu;
     if (ebc) {
       beer.stats.ebc = ebc;
-      beer.stats.srm = calculateSrm(ebc);
-      beer.stats.hex = calculateHex(calculateSrm(ebc));
+      beer.stats.srm = ebcToSrm(ebc);
+      beer.stats.hex = srmToHex(ebcToSrm(ebc));
     }
 
     await beer.save();
